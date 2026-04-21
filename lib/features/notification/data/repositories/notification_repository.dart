@@ -21,6 +21,21 @@ class NotificationRepository {
         .toList();
   }
 
+  Future<List<NotificationModel>> getAllNotifications() async {
+    final response = await _supabase
+        .from('notifications')
+        .select()
+        .order('created_at', ascending: false);
+    final list = response as List<dynamic>;
+    return list
+        .map(
+          (json) => NotificationModel.fromJson(
+            Map<String, dynamic>.from(json as Map),
+          ),
+        )
+        .toList();
+  }
+
   Future<void> markAsRead(int notifId) async {
     await _supabase
         .from('notifications')
